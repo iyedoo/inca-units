@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incarnadine Units</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .title {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .ranking-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .ranking-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #dee2e6;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .ranking-table th:hover {
+            background: #e9ecef;
+        }
+
+        .ranking-table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .ranking-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .score {
+            text-align: center;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .team-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .team-1 .team-badge { 
+            background-color: #e8f5e9; 
+            color: #2e7d32;
+        }
+        .team-2 .team-badge { 
+            background-color: #e3f2fd; 
+            color: #1565c0;
+        }
+        .team-4 .team-badge { 
+            background-color: #fff3e0; 
+            color: #ef6c00;
+        }
+        .team-8 .team-badge { 
+            background-color: #fce4ec; 
+            color: #c2185b;
+        }
+
+        .sort-icon::after {
+            content: '↕';
+            margin-left: 5px;
+            font-size: 12px;
+        }
+
+        .sort-asc::after {
+            content: '↑';
+        }
+
+        .sort-desc::after {
+            content: '↓';
+        }
+
+        .done-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .done-icon.completed {
+            background-color: #4caf50;
+            color: white;
+        }
+
+        .done-icon:hover {
+            background-color: #e8f5e9;
+        }
+
+        .done-icon.completed:hover {
+            background-color: #43a047;
+        }
+
+        .filters {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="title">Incarnadine Units</h1>
+    </div>
+
+    <div class="filters">
+        <select id="teamFilter">
+            <option value="all">All Teams</option>
+            <option value="1">Incarnadine 1</option>
+            <option value="2">Incarnadine 2</option>
+            <option value="4">Incarnadine 4</option>
+            <option value="8">Incarnadine 8</option>
+        </select>
+    </div>
+    
+    <table class="ranking-table">
+        <thead>
+            <tr>
+                <th data-sort="team" class="sort-icon">Team</th>
+                <th data-sort="title" class="sort-icon">Unit Title</th>
+                <th data-sort="points" class="sort-icon">Points</th>
+                <th>Done</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="team-1">
+                <td><span class="team-badge">Incarnadine 1</span></td>
+                <td>Introduction to Programming</td>
+                <td class="score">230</td>
+                <td><div class="done-icon completed">✓</div></td>
+            </tr>
+            <tr class="team-2">
+                <td><span class="team-badge">Incarnadine 2</span></td>
+                <td>Data Structures</td>
+                <td class="score">180</td>
+                <td><div class="done-icon">✓</div></td>
+            </tr>
+            <tr class="team-4">
+                <td><span class="team-badge">Incarnadine 4</span></td>
+                <td>Algorithms</td>
+                <td class="score">230</td>
+                <td><div class="done-icon">✓</div></td>
+            </tr>
+            <tr class="team-8">
+                <td><span class="team-badge">Incarnadine 8</span></td>
+                <td>System Design</td>
+                <td class="score">30</td>
+                <td><div class="done-icon">✓</div></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        document.querySelectorAll('th[data-sort]').forEach(th => {
+            th.addEventListener('click', () => {
+                const table = th.closest('table');
+                const tbody = table.querySelector('tbody');
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const column = Array.from(th.parentNode.children).indexOf(th);
+                const sortOrder = th.classList.contains('sort-asc') ? -1 : 1;
+
+                document.querySelectorAll('th').forEach(header => {
+                    header.classList.remove('sort-asc', 'sort-desc');
+                });
+
+                th.classList.add(sortOrder === 1 ? 'sort-asc' : 'sort-desc');
+
+                rows.sort((a, b) => {
+                    const aValue = a.children[column].textContent;
+                    const bValue = b.children[column].textContent;
+                    
+                    if (!isNaN(aValue) && !isNaN(bValue)) {
+                        return (Number(aValue) - Number(bValue)) * sortOrder;
+                    }
+                    return aValue.localeCompare(bValue) * sortOrder;
+                });
+
+                tbody.append(...rows);
+            });
+        });
+
+        document.querySelectorAll('.done-icon').forEach(icon => {
+            icon.addEventListener('click', () => {
+                icon.classList.toggle('completed');
+            });
+        });
+
+        document.getElementById('teamFilter').addEventListener('change', (e) => {
+            const selectedTeam = e.target.value;
+            const rows = document.querySelectorAll('.ranking-table tbody tr');
+
+            rows.forEach(row => {
+                if (selectedTeam === 'all' || row.classList.contains(`team-${selectedTeam}`)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
