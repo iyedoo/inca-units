@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incarnadine Units</title>
+    <title>Incarnadine Training Units</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -13,191 +14,430 @@
         }
 
         body {
-            background-color: #f5f5f5;
-            padding: 20px;
+            background-color: #f0f2f5;
+            padding: 32px;
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 32px;
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .title-section {
+            flex: 1;
         }
 
         .title {
             font-size: 24px;
-            color: #333;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .user-info {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stats-section {
+            display: flex;
+            gap: 24px;
+        }
+
+        .stat {
+            text-align: right;
+        }
+
+        .stat-number {
+            font-size: 20px;
+            font-weight: bold;
+            color: #832729; /* Incarnadine base color */
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .filters {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .filter-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        select {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            cursor: pointer;
+        }
+
+        select:hover {
+            border-color: #b0b0b0;
         }
 
         .ranking-table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 12px;
             overflow: hidden;
         }
 
         .ranking-table th {
             background: #f8f9fa;
-            padding: 12px;
+            padding: 16px;
             text-align: left;
             font-weight: 600;
-            color: #333;
-            border-bottom: 2px solid #dee2e6;
+            color: #444;
+            border-bottom: 2px solid #eee;
             cursor: pointer;
-            user-select: none;
-        }
-
-        .ranking-table th:hover {
-            background: #e9ecef;
+            transition: background-color 0.2s;
         }
 
         .ranking-table td {
-            padding: 12px;
-            border-bottom: 1px solid #dee2e6;
+            padding: 16px;
+            border-bottom: 1px solid #eee;
         }
 
-        .ranking-table tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .score {
-            text-align: center;
-            font-family: monospace;
-            font-size: 14px;
+        .ranking-table tr:last-child td {
+            border-bottom: none;
         }
 
         .team-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 20px;
             font-weight: 500;
             font-size: 14px;
+            transition: transform 0.2s;
+        }
+
+        .team-badge:hover {
+            transform: scale(1.05);
         }
 
         .team-1 .team-badge { 
-            background-color: #e8f5e9; 
-            color: #2e7d32;
+            background-color: #fde8e8; 
+            color: #832729;
         }
         .team-2 .team-badge { 
-            background-color: #e3f2fd; 
-            color: #1565c0;
+            background-color: #f9d1d1; 
+            color: #732224;
         }
         .team-4 .team-badge { 
-            background-color: #fff3e0; 
-            color: #ef6c00;
+            background-color: #f4baba; 
+            color: #631d1f;
         }
         .team-8 .team-badge { 
-            background-color: #fce4ec; 
-            color: #c2185b;
+            background-color: #f0a3a3; 
+            color: #53191a;
         }
 
-        .sort-icon::after {
-            content: '↕';
-            margin-left: 5px;
+        .points {
+            font-family: monospace;
+            font-size: 16px;
+            color: #832729;
+            font-weight: 600;
+        }
+
+        .category-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            border-radius: 4px;
             font-size: 12px;
-        }
-
-        .sort-asc::after {
-            content: '↑';
-        }
-
-        .sort-desc::after {
-            content: '↓';
+            background: #f0f2f5;
+            color: #666;
         }
 
         .done-icon {
-            width: 20px;
-            height: 20px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
+            border: 2px solid #e0e0e0;
+            font-size: 16px;
         }
 
         .done-icon.completed {
-            background-color: #4caf50;
+            background-color: #832729;
             color: white;
+            border-color: #832729;
         }
 
         .done-icon:hover {
-            background-color: #e8f5e9;
+            transform: scale(1.1);
         }
 
-        .done-icon.completed:hover {
-            background-color: #43a047;
-        }
-
-        .filters {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        select {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background: white;
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1 class="title">Incarnadine Units</h1>
-    </div>
+    <div class="container">
+        <div class="header">
+            <div class="title-section">
+                <h1 class="title">Incarnadine Training Units</h1>
+                <div class="user-info">Welcome back, Iyed Baassou</div>
+            </div>
+            <div class="stats-section">
+                <div class="stat">
+                    <div class="stat-number">670</div>
+                    <div class="stat-label">Total Points</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">75%</div>
+                    <div class="stat-label">Completion Rate</div>
+                </div>
+            </div>
+        </div>
 
-    <div class="filters">
-        <select id="teamFilter">
-            <option value="all">All Teams</option>
-            <option value="1">Incarnadine 1</option>
-            <option value="2">Incarnadine 2</option>
-            <option value="4">Incarnadine 4</option>
-            <option value="8">Incarnadine 8</option>
-        </select>
+        <div class="filters">
+            <span class="filter-label">Filter by:</span>
+            <select id="teamFilter">
+                <option value="all">All Teams</option>
+                <option value="1">Incarnadine 1</option>
+                <option value="2">Incarnadine 2</option>
+                <option value="4">Incarnadine 4</option>
+                <option value="8">Incarnadine 8</option>
+            </select>
+        </div>
+        
+        <table class="ranking-table">
+            <thead>
+                <tr>
+                    <th data-sort="team"><i class="fa-solid fa-users"></i> Team</th>
+                    <th data-sort="title"><i class="fa-solid fa-book"></i> Unit Title</th>
+                    <th data-sort="category"><i class="fa-solid fa-tag"></i> Category</th>
+                    <th data-sort="points"><i class="fa-solid fa-star"></i> Points</th>
+                    <th><i class="fa-solid fa-check"></i> Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="team-1">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 1</span></td>
+                    <td>Phlox to Incarnadine</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> General</span></td>
+                    <td class="points">610</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-1">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 1</span></td>
+                    <td>Binary Exponentation</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-diagram-project"></i> Math</span></td>
+                    <td class="points">200</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-1">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 1</span></td>
+                    <td>Number Theory</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-square-root-variable"></i> Math</span></td>
+                    <td class="points">360</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-1">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 1</span></td>
+                    <td>Time Complexity</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-microchip"></i> Technique</span></td>
+                    <td class="points">50</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-1">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 1</span></td>
+                    <td>Brute-force</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">665</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Backtracking</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">350</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Binary Search</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">450</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Bitmasks</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Math</span></td>
+                    <td class="points">410+</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Combinators</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Math</span></td>
+                    <td class="points">500</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Data Structures</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">900+</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Divide and Conquer</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Technique</span></td>
+                    <td class="points">450</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Dynamic Programming</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">920</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Graph</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">800</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Greedy Algorithms</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">900</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Meet in the Middle</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Technique</span></td>
+                    <td class="points">280</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Prefix Sums</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">600</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Sorting</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">800</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Two Pointers</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Technique</span></td>
+                    <td class="points">330</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-2">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 2</span></td>
+                    <td>Venice Technique</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Technique</span></td>
+                    <td class="points">230</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-4">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 4</span></td>
+                    <td>Eratostenes Sieve</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">350</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-4">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 4</span></td>
+                    <td>Game Theory</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">N/A</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-4">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 4</span></td>
+                    <td>Geometry</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Math</span></td>
+                    <td class="points">960</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-4">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 4</span></td>
+                    <td>Interactive Problems</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Technique</span></td>
+                    <td class="points">1130</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-4">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 4</span></td>
+                    <td>Square Root Tricks</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Math</span></td>
+                    <td class="points">N/A</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+                <tr class="team-4">
+                    <td><span class="team-badge"><i class="fa-solid fa-shield"></i> Incarnadine 4</span></td>
+                    <td>Ternary Search</td>
+                    <td><span class="category-tag"><i class="fa-solid fa-code"></i> Algorithmic</span></td>
+                    <td class="points">250</td>
+                    <td><div class="done-icon"><i class="fa-solid fa-check"></i></div></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="empty-state">
+            <i class="fa-solid fa-filter-circle-xmark"></i> It's quiet here... Please tell raouf to add some units.
+        </div>
     </div>
-    
-    <table class="ranking-table">
-        <thead>
-            <tr>
-                <th data-sort="team" class="sort-icon">Team</th>
-                <th data-sort="title" class="sort-icon">Unit Title</th>
-                <th data-sort="points" class="sort-icon">Points</th>
-                <th>Done</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="team-1">
-                <td><span class="team-badge">Incarnadine 1</span></td>
-                <td>Introduction to Programming</td>
-                <td class="score">230</td>
-                <td><div class="done-icon completed">✓</div></td>
-            </tr>
-            <tr class="team-2">
-                <td><span class="team-badge">Incarnadine 2</span></td>
-                <td>Data Structures</td>
-                <td class="score">180</td>
-                <td><div class="done-icon">✓</div></td>
-            </tr>
-            <tr class="team-4">
-                <td><span class="team-badge">Incarnadine 4</span></td>
-                <td>Algorithms</td>
-                <td class="score">230</td>
-                <td><div class="done-icon">✓</div></td>
-            </tr>
-            <tr class="team-8">
-                <td><span class="team-badge">Incarnadine 8</span></td>
-                <td>System Design</td>
-                <td class="score">30</td>
-                <td><div class="done-icon">✓</div></td>
-            </tr>
-        </tbody>
-    </table>
 
     <script>
+        // Sorting functionality
         document.querySelectorAll('th[data-sort]').forEach(th => {
             th.addEventListener('click', () => {
                 const table = th.closest('table');
@@ -226,23 +466,32 @@
             });
         });
 
+        // Done icon functionality
         document.querySelectorAll('.done-icon').forEach(icon => {
             icon.addEventListener('click', () => {
                 icon.classList.toggle('completed');
             });
         });
 
+        // Team filter functionality
         document.getElementById('teamFilter').addEventListener('change', (e) => {
             const selectedTeam = e.target.value;
             const rows = document.querySelectorAll('.ranking-table tbody tr');
+            const table = document.querySelector('.ranking-table');
+            const emptyState = document.querySelector('.empty-state');
+            let hasVisibleRows = false;
 
             rows.forEach(row => {
                 if (selectedTeam === 'all' || row.classList.contains(`team-${selectedTeam}`)) {
                     row.style.display = '';
+                    hasVisibleRows = true;
                 } else {
                     row.style.display = 'none';
                 }
             });
+
+            table.style.display = hasVisibleRows ? '' : 'none';
+            emptyState.style.display = hasVisibleRows ? 'none' : 'block';
         });
     </script>
 </body>
